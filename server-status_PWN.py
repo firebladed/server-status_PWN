@@ -63,6 +63,15 @@ parser.add_argument("--debug",
                     for errors and exceptions",
                     action='store_true',
                     default=False)
+parser.add_argument("-p", "--post",
+                    dest="use_post",
+                    help="Uses POST for requests",
+                    action='store_true',
+                    default=False)
+parser.add_argument("-d","--post_data",
+                    dest="post_data",
+                    help="Data for POST for requests",
+                    action='store')
 
 args = parser.parse_args()
 
@@ -72,6 +81,8 @@ db = args.db if args.db else ''
 output_path = args.output_path if args.output_path else ''
 enable_full_logging = args.enable_full_logging
 enable_debug = args.enable_debug
+use_post = args.use_post
+post_data = args.post_data if args.post_data else ''
 
 
 class tcolor:
@@ -138,11 +149,22 @@ class Request_Handler():
         """
 
         try:
-            req = requests.get(url,
-                               headers=headers,
-                               timeout=int(self.timeout),
-                               verify=False,
-                               allow_redirects=False)
+            if (use_post):
+                req = requests.post(url,
+                                   headers=headers,
+                                   timeout=int(self.timeout),
+                                   data=post_data, 
+                                   verify=False,
+                                   allow_redirects=False)                
+            
+            else
+                req = requests.get(url,
+                                   headers=headers,
+                                   timeout=int(self.timeout),
+                                   verify=False,
+                                   allow_redirects=False)
+            
+            
             output = str(req.content)
         except Exception as e:
             Exception_Handler(e)
