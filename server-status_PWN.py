@@ -157,7 +157,7 @@ class Request_Handler():
                                    verify=False,
                                    allow_redirects=False)                
             
-            else
+            else:
                 req = requests.get(url,
                                    headers=headers,
                                    timeout=int(self.timeout),
